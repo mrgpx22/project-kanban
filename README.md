@@ -22,7 +22,3 @@ cd kanban
 ```
 
 Configura tus credenciales de Supabase en el archivo de configuración y abre `index.html` en tu navegador.
-
-## 📸 Capturas
-
-<!-- Añade aquí screenshots de la aplicación -->
