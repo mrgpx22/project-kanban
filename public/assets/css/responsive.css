@@ -1,0 +1,757 @@
+body,
+html {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+body:not(.login-body) {
+  padding: clamp(10px, 1.1vw, 22px) clamp(8px, 0.9vw, 16px) clamp(14px, 1.4vw, 28px);
+}
+
+.login-body {
+  padding: clamp(12px, 1.2vw, 20px);
+}
+
+body::before,
+body:not(.login-body)::before,
+.login-body::before {
+  opacity: 0.28;
+  background-size: 28px 28px;
+}
+
+.main-header,
+.calendar-header,
+.gantt-header,
+.notes-header,
+.panel-top {
+  min-width: 0;
+}
+
+.main-header > div,
+.main-actions,
+.calendar-header > nav,
+.gantt-header > nav,
+.notes-header > nav,
+.panel-top > nav,
+.panel-top > .top-filters,
+.project-search-row,
+.notes-create,
+.ai-assistant__form,
+.modal-actions,
+.task-attachments-actions,
+.workspace-sidebar,
+.workspace-sidebar-right,
+.kanban-panel {
+  min-width: 0;
+}
+
+.project-card {
+  padding-right: clamp(96px, 8vw, 128px);
+}
+
+.project-complete-stamp {
+  width: clamp(72px, 6vw, 92px);
+  height: clamp(72px, 6vw, 92px);
+}
+
+.project-complete-stamp img {
+  width: clamp(50px, 4.5vw, 68px);
+  height: clamp(50px, 4.5vw, 68px);
+}
+
+.board {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.ai-report {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.calendar-layout {
+  min-width: 0;
+}
+
+#createProjectModal .modal,
+#manageMembersModal .modal,
+#peopleDirectoryModal .modal,
+#createCardModal .modal,
+.task-info-modal {
+  max-height: calc(100vh - 24px);
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-backdrop,
+.task-info-backdrop {
+  padding: clamp(12px, 2vw, 24px);
+  overflow: auto;
+}
+
+#calendar {
+  min-height: clamp(560px, 72vh, 980px);
+}
+
+.gantt-container {
+  height: clamp(560px, 72vh, 980px);
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fc .fc-toolbar-chunk {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+@media (max-width: 1100px) {
+  .main-header,
+  .calendar-header,
+  .gantt-header,
+  .notes-header,
+  .panel-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .main-actions,
+  .view-tabs,
+  .top-filters {
+    width: 100%;
+  }
+
+  .toolbar {
+    justify-content: flex-start;
+  }
+
+  .dashboard-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .workload-grid,
+  .members-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .field-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  body:not(.login-body) {
+    padding: 10px 8px 14px;
+  }
+
+  .login-body {
+    padding: 12px 8px 16px;
+  }
+
+  .main-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    width: 100%;
+    gap: 8px;
+  }
+
+  .view-tabs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    width: 100%;
+    gap: 6px;
+  }
+
+  .tab-btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .top-filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+  }
+
+  .filter {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .filter-search {
+    grid-column: 1 / -1;
+  }
+
+  .filter input,
+  .filter select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .project-search-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  #projectSearchInput {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .project-search-tags {
+    width: 100%;
+  }
+
+  .modal-backdrop,
+  .task-info-backdrop {
+    align-items: start;
+    padding: 8px;
+  }
+
+  .modal,
+  .task-info-modal {
+    width: min(100%, 720px);
+  }
+
+  .members-modal,
+  .people-modal {
+    width: min(100%, 100%);
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card {
+    padding: 14px 82px 14px 14px;
+  }
+
+  .project-complete-stamp {
+    top: 12px;
+    right: 12px;
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+  }
+
+  .project-complete-stamp img {
+    width: 46px;
+    height: 46px;
+  }
+
+  .project-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 6px;
+    width: 100%;
+  }
+
+  .member-controls,
+  .available-user-actions,
+  .task-attachments-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .member-controls > *,
+  .available-user-actions > *,
+  .task-attachments-actions > * {
+    width: 100%;
+  }
+
+  .modal-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 8px;
+    width: 100%;
+  }
+
+  .modal-actions > * {
+    width: 100%;
+  }
+
+  .notes-create,
+  .ai-assistant__form {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-assistant__button,
+  .btn-create,
+  .notes-create .btn-create,
+  .toolbar .btn-primary,
+  .calendar-header .btn-refresh,
+  .gantt-header .btn-refresh,
+  .notes-header .btn-refresh,
+  .task-info-close,
+  .task-info-edit {
+    width: 100%;
+  }
+
+  .task-comment-form textarea,
+  .field input,
+  .field select,
+  .field textarea,
+  .notes-input-wrap input,
+  .ai-assistant__input,
+  .filter input,
+  .filter select,
+  #projectSearchInput,
+  .member-controls select,
+  .available-user-actions select,
+  .task-attachments-actions input[type="file"],
+  .task-info-modal input,
+  .task-info-modal select,
+  .task-info-modal textarea,
+  .login-card input {
+    font-size: 16px;
+  }
+
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-dept-checklist {
+    grid-template-columns: 1fr;
+  }
+
+  .members-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .available-users-list {
+    max-height: 260px;
+  }
+
+  .people-table-wrap {
+    overflow: visible;
+  }
+
+  .people-table {
+    min-width: 0;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .people-table thead {
+    display: none;
+  }
+
+  .people-table tbody {
+    display: grid;
+    gap: 10px;
+  }
+
+  .people-table tbody tr {
+    display: grid;
+    gap: 8px;
+    border: 1px solid #d9e5fa;
+    border-radius: 14px;
+    background: #f9fcff;
+    padding: 10px;
+  }
+
+  .people-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    border: 0;
+    padding: 0;
+    background: transparent !important;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .people-table tbody td::before {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #56709a;
+    flex: 0 0 auto;
+    padding-top: 2px;
+  }
+
+  .people-table tbody td:nth-child(1)::before {
+    content: "#";
+  }
+
+  .people-table tbody td:nth-child(2)::before {
+    content: "Nombre";
+  }
+
+  .people-table tbody td:nth-child(3)::before {
+    content: "Apellido1";
+  }
+
+  .people-table tbody td:nth-child(4)::before {
+    content: "Apellido2";
+  }
+
+  .people-table tbody td:nth-child(5)::before {
+    content: "Cargo";
+  }
+
+  .people-table tbody td:nth-child(6)::before {
+    content: "Departamento";
+  }
+
+  .people-table tbody td:nth-child(7)::before {
+    content: "Accion";
+  }
+
+  .people-table tbody td:nth-child(7) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .people-table tbody td:nth-child(7) > * {
+    width: 100%;
+  }
+
+  .people-table tbody td.member-empty {
+    display: block;
+    padding: 12px;
+  }
+
+  .people-table tbody td.member-empty::before {
+    content: "" !important;
+  }
+
+  .task-info-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .task-info-actions {
+    justify-content: flex-start;
+  }
+
+  .task-info-edit {
+    max-width: none;
+  }
+
+  .task-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #createProjectModal .modal,
+  #manageMembersModal .modal,
+  #peopleDirectoryModal .modal,
+  #createCardModal .modal,
+  .task-info-modal {
+    max-height: calc(100dvh - 16px);
+  }
+
+  .calendar-header,
+  .gantt-header,
+  .notes-header,
+  .main-header,
+  .panel-top {
+    padding: 12px;
+  }
+
+  .calendar-header,
+  .gantt-header,
+  .notes-header {
+    gap: 8px;
+  }
+
+  #calendar {
+    min-height: 540px;
+  }
+
+  .gantt-container {
+    height: 540px;
+  }
+
+  .fc .fc-toolbar-title {
+    font-size: 1rem;
+  }
+
+  .fc .fc-button {
+    padding: 0.42rem 0.7rem;
+  }
+
+  .ai-report {
+    overflow-x: auto;
+  }
+
+  .ai-table {
+    min-width: 620px;
+  }
+
+  .notes-list {
+    max-height: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .session-strip {
+    gap: 8px;
+  }
+
+  .session-strip span {
+    width: 100%;
+  }
+
+  .project-progress-track {
+    height: 8px;
+  }
+
+  .project-complete-stamp {
+    top: 10px;
+    right: 10px;
+    width: 56px;
+    height: 56px;
+  }
+
+  .project-complete-stamp img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ai-assistant__summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ai-assistant__chevron {
+    margin-top: 2px;
+  }
+
+  .task-details {
+    gap: 10px;
+  }
+}
+
+@media (min-width: 1800px) {
+  body:not(.login-body) {
+    padding: 16px 14px 22px;
+  }
+
+  .app {
+    width: min(100%, 2520px);
+  }
+
+  .main-app {
+    width: min(100%, 1780px);
+  }
+
+  .calendar-app,
+  .gantt-app {
+    width: min(100%, 1820px);
+  }
+
+  .notes-app {
+    width: min(100%, 1400px);
+  }
+
+  .login-app {
+    width: min(100%, 520px);
+  }
+
+  .workspace {
+    grid-template-columns: 280px minmax(0, 1fr) clamp(320px, 22vw, 400px);
+    grid-template-areas: "sidebar main right";
+    gap: 16px;
+  }
+
+  .board {
+    grid-template-columns: repeat(7, minmax(240px, 1fr));
+    gap: 12px;
+  }
+
+  .column {
+    min-height: 380px;
+  }
+
+  .cards {
+    min-height: 260px;
+  }
+
+  .project-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .project-card {
+    padding-right: 140px;
+  }
+
+  .project-complete-stamp {
+    width: 96px;
+    height: 96px;
+  }
+
+  .calendar-header,
+  .gantt-header,
+  .notes-header,
+  .main-header,
+  .panel-top,
+  .calendar-panel,
+  .gantt-shell,
+  .notes-shell {
+    padding: 16px 18px;
+  }
+
+  #calendar {
+    min-height: clamp(620px, 72vh, 980px);
+  }
+
+  .gantt-container {
+    height: clamp(620px, 72vh, 980px);
+  }
+
+  .notes-list {
+    max-height: clamp(480px, 68vh, 900px);
+  }
+
+  .ai-assistant {
+    margin-top: 16px;
+  }
+
+  .ai-assistant__summary {
+    padding: 16px 18px;
+  }
+
+  .ai-assistant__body {
+    padding: 16px 18px 18px;
+  }
+}
+
+@media (min-width: 2400px) and (min-aspect-ratio: 32/9) {
+  body:not(.login-body) {
+    padding: 14px 12px 18px;
+  }
+
+  .app {
+    width: min(100%, 3200px);
+  }
+
+  .main-app {
+    width: min(100%, 2200px);
+  }
+
+  .calendar-app,
+  .gantt-app {
+    width: min(100%, 2320px);
+  }
+
+  .notes-app {
+    width: min(100%, 1600px);
+  }
+
+  .login-app {
+    width: min(100%, 560px);
+  }
+
+  .workspace {
+    grid-template-columns: 300px minmax(0, 1fr) clamp(340px, 20vw, 420px);
+    grid-template-areas: "sidebar main right";
+    gap: 18px;
+  }
+
+  .kanban-panel {
+    padding: 14px 14px 18px;
+  }
+
+  .board {
+    grid-template-columns: repeat(7, minmax(270px, 1fr));
+    gap: 14px;
+  }
+
+  .column {
+    min-height: 420px;
+  }
+
+  .cards {
+    min-height: 280px;
+  }
+
+  .project-grid {
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 18px;
+  }
+
+  .project-card {
+    padding: 18px 148px 18px 18px;
+  }
+
+  .project-complete-stamp {
+    width: 104px;
+    height: 104px;
+    right: 20px;
+    top: 20px;
+  }
+
+  .dashboard-kpis {
+    gap: 12px;
+  }
+
+  .dashboard-kpi strong {
+    font-size: 1.5rem;
+  }
+
+  .summary-item strong {
+    font-size: 1.7rem;
+  }
+
+  .calendar-header,
+  .gantt-header,
+  .notes-header,
+  .main-header,
+  .panel-top,
+  .calendar-panel,
+  .gantt-shell,
+  .notes-shell {
+    padding: 16px 20px;
+  }
+
+  #calendar {
+    min-height: clamp(720px, 72vh, 1080px);
+  }
+
+  .gantt-container {
+    height: clamp(720px, 72vh, 1080px);
+  }
+
+  .notes-list {
+    max-height: clamp(520px, 70vh, 960px);
+  }
+
+  .workload-list {
+    max-height: 280px;
+  }
+
+  .ai-assistant {
+    margin-top: 18px;
+  }
+
+  .ai-assistant__summary {
+    padding: 18px 20px;
+  }
+
+  .ai-assistant__body {
+    padding: 18px 20px 20px;
+  }
+}

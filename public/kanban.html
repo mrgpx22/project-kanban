@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanban | Proyecto</title>
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260407-3">
+  <link rel="stylesheet" href="assets/css/ai-assistant.css?v=20260320-2">
+  <link rel="stylesheet" href="assets/css/responsive.css?v=20260407-3">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/supabase-config.js?v=20260317-1"></script>
+  <script src="assets/js/app-context.js?v=20260317-1"></script>
+  <script src="assets/js/shared-utils.js?v=20260327-1"></script>
+  <script src="assets/js/router.js" defer></script>
+  <script src="assets/js/script.js?v=20260327-2" defer></script>
+  <script src="assets/js/ai-assistant.js?v=20260320-2" defer></script>
+</head>
+<body>
+  <main class="app">
+    <div class="workspace">
+      <aside class="workspace-sidebar">
+        <aside class="legend" aria-label="Leyenda de departamentos">
+          <h3>Departments</h3>
+          <ul class="legend-list">
+            <li class="legend-item"><span class="legend-swatch" style="--legend-color:#f59e0b;"></span>Producto</li>
+            <li class="legend-item"><span class="legend-swatch" style="--legend-color:#000000;"></span>UX</li>
+            <li class="legend-item"><span class="legend-swatch" style="--legend-color:#3b82f6;"></span>Frontend</li>
+            <li class="legend-item"><span class="legend-swatch" style="--legend-color:#10b981;"></span>Backend</li>
+            <li class="legend-item"><span class="legend-swatch" style="--legend-color:#14b8a6;"></span>BBDD</li>
+            <li class="legend-item"><span class="legend-swatch" style="--legend-color:#8b5cf6;"></span>Marketing</li>
+            <li class="legend-item"><span class="legend-swatch" style="--legend-color:#ef4444;"></span>RRHH</li>
+            <li class="legend-item"><span class="legend-swatch" style="--legend-color:#f97316;"></span>Ventas</li>
+            <li class="legend-item"><span class="legend-swatch" style="--legend-color:#94a3b8;"></span>General</li>
+          </ul>
+        </aside>
+
+        <section class="delay-radar-panel" id="delayRadarPanel" aria-label="Radar de plazos">
+          <header class="delay-radar-panel__header">
+            <p class="delay-radar-panel__eyebrow">Plazos</p>
+            <h2>Radar de retrasos</h2>
+            <p class="delay-radar-panel__description">
+              Las tarjetas vencidas se pintan en rojo. El radar te muestra que rescatar primero.
+            </p>
+          </header>
+
+          <div class="delay-radar-stats" aria-live="polite">
+            <article class="delay-radar-stat delay-radar-stat--critical">
+              <span class="delay-radar-stat__label">Criticas</span>
+              <span class="delay-radar-stat__value" id="delayRadarCriticalCount">0</span>
+            </article>
+            <article class="delay-radar-stat delay-radar-stat--overdue">
+              <span class="delay-radar-stat__label">Retrasadas</span>
+              <span class="delay-radar-stat__value" id="delayRadarOverdueCount">0</span>
+            </article>
+            <article class="delay-radar-stat delay-radar-stat--today">
+              <span class="delay-radar-stat__label">Vence hoy</span>
+              <span class="delay-radar-stat__value" id="delayRadarDueTodayCount">0</span>
+            </article>
+            <article class="delay-radar-stat delay-radar-stat--risk">
+              <span class="delay-radar-stat__label">En riesgo</span>
+              <span class="delay-radar-stat__value" id="delayRadarRiskCount">0</span>
+            </article>
+            <article class="delay-radar-stat delay-radar-stat--none">
+              <span class="delay-radar-stat__label">Sin fecha</span>
+              <span class="delay-radar-stat__value" id="delayRadarNoDateCount">0</span>
+            </article>
+          </div>
+
+          <article class="delay-radar-focus" id="delayRadarFocus" aria-live="polite">
+            <p class="delay-radar-focus__eyebrow">Siguiente rescate</p>
+            <span class="delay-radar-focus__badge">Radar listo</span>
+            <h3 class="delay-radar-focus__title">Sin tareas con fecha limite</h3>
+            <p class="delay-radar-focus__text">Anade una fecha final para activar el radar automatico.</p>
+          </article>
+
+          <div class="delay-radar-actions">
+            <button class="btn-mini" id="delayRadarFilterBtn" type="button">Solo urgentes</button>
+            <button class="btn-mini" id="delayRadarResetBtn" type="button">Ver todo</button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="kanban-panel">
+        <header class="panel-top">
+          <nav class="view-tabs" aria-label="Vistas de proyecto">
+            <a class="tab-btn" id="mainViewLink" href="index.html">MAIN</a>
+            <button class="tab-btn is-active" type="button">Kanban</button>
+            <a class="tab-btn" id="calendarViewLink" href="calendar.html">Calendar</a>
+            <a class="tab-btn" id="ganttViewLink" href="gantt.html">Gantt Chart</a>
+            <a class="tab-btn" id="notesViewLink" href="notas.html">Notas</a>
+          </nav>
+
+          <div class="top-filters">
+            <label class="filter">
+              <span>Tasks:</span>
+              <select id="tasksFilter">
+                <option value="backlog">Backlog</option>
+                <option value="open-todo">Open / To Do</option>
+                <option value="in-progress">In Progress</option>
+                <option value="blocked">Blocked</option>
+                <option value="review-qa">Review / QA</option>
+                <option value="pending-approval">Pending Approval</option>
+                <option value="done">Done / Complete</option>
+                <option value="all" selected>All</option>
+              </select>
+            </label>
+            <label class="filter">
+              <span>Asignado:</span>
+              <select id="usersFilter">
+                <option value="current" selected>Current</option>
+                <option value="all">All</option>
+                <option value="role:jefe">Jefe</option>
+                <option value="unassigned">Sin asignar</option>
+              </select>
+            </label>
+            <label class="filter">
+              <span>Tags:</span>
+              <select id="tagsFilter">
+                <option value="all" selected>All</option>
+                <option value="Producto">Producto</option>
+                <option value="UX">UX</option>
+                <option value="Backend">Backend</option>
+                <option value="Frontend">Frontend</option>
+                <option value="Marketing">Marketing</option>
+                <option value="RRHH">RRHH</option>
+                <option value="Ventas">Ventas</option>
+                <option value="BBDD">BBDD</option>
+                <option value="General">General</option>
+              </select>
+            </label>
+            <label class="filter filter-search">
+              <span>Buscar:</span>
+              <input id="globalSearchInput" type="search" placeholder="Titulo, comentario, adjunto...">
+            </label>
+          </div>
+        </header>
+
+        <p class="project-context" id="projectContext" aria-live="polite"></p>
+
+        <div class="toolbar">
+          <button class="btn-primary" id="openCreateModal" type="button">+ Nueva tarea</button>
+        </div>
+        <p class="sync-status" id="syncStatus" aria-live="polite"></p>
+
+        
+        <section class="progress-wrap" aria-live="polite">
+          <div class="progress-head">
+            <span class="progress-label">Progress</span>
+            <span class="progress-value" id="progressValue">0%</span>
+          </div>
+          <div
+            class="progress-track"
+            role="progressbar"
+            aria-label="Porcentaje completado"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+          >
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+        </section>
+
+        <section class="board">
+          <article class="column column-backlog">
+            <h2>Backlog</h2>
+            <div class="cards" data-column="backlog"></div>
+            <button class="add-task-btn" type="button" data-target-column="backlog">+ Add Task</button>
+          </article>
+
+          <article class="column column-todo">
+            <h2>Open / To Do</h2>
+            <div class="cards" data-column="open-todo"></div>
+            <button class="add-task-btn" type="button" data-target-column="open-todo">+ Add Task</button>
+          </article>
+
+          <article class="column column-in-progress">
+            <h2>In Progress</h2>
+            <div class="cards" data-column="in-progress"></div>
+            <button class="add-task-btn" type="button" data-target-column="in-progress">+ Add Task</button>
+          </article>
+
+          <article class="column column-blocked">
+            <h2>Blocked</h2>
+            <div class="cards" data-column="blocked"></div>
+            <button class="add-task-btn" type="button" data-target-column="blocked">+ Add Task</button>
+          </article>
+
+          <article class="column column-review">
+            <h2>Review / QA</h2>
+            <div class="cards" data-column="review-qa"></div>
+            <button class="add-task-btn" type="button" data-target-column="review-qa">+ Add Task</button>
+          </article>
+
+          <article class="column column-approval">
+            <h2>Pending Approval</h2>
+            <div class="cards" data-column="pending-approval"></div>
+            <button class="add-task-btn" type="button" data-target-column="pending-approval">+ Add Task</button>
+          </article>
+
+          <article class="column column-done">
+            <h2>Done / Complete</h2>
+            <div class="cards" data-column="done"></div>
+            <button class="add-task-btn" type="button" data-target-column="done">+ Add Task</button>
+          </article>
+        </section>
+      </section>
+
+      <aside class="workspace-sidebar-right">
+        <section class="daily-focus-panel" id="dailyFocusPanel" aria-label="Foco diario">
+          <header class="daily-focus-panel__header">
+            <p class="daily-focus-panel__eyebrow">Hoy</p>
+            <h2>Foco diario</h2>
+            <p class="daily-focus-panel__description">
+              Ordena lo que mas desbloquea el dia: urgencia, prioridad y el impacto que arrastra.
+            </p>
+          </header>
+
+          <div class="daily-focus-stats" aria-live="polite">
+            <article class="daily-focus-stat daily-focus-stat--critical">
+              <span class="daily-focus-stat__label">Criticas</span>
+              <span class="daily-focus-stat__value" id="dailyFocusCriticalCount">0</span>
+            </article>
+            <article class="daily-focus-stat daily-focus-stat--overdue">
+              <span class="daily-focus-stat__label">Retrasadas</span>
+              <span class="daily-focus-stat__value" id="dailyFocusOverdueCount">0</span>
+            </article>
+            <article class="daily-focus-stat daily-focus-stat--blocked">
+              <span class="daily-focus-stat__label">Bloqueos</span>
+              <span class="daily-focus-stat__value" id="dailyFocusBlockedCount">0</span>
+            </article>
+            <article class="daily-focus-stat daily-focus-stat--impact">
+              <span class="daily-focus-stat__label">Impacto</span>
+              <span class="daily-focus-stat__value" id="dailyFocusImpactCount">0</span>
+            </article>
+          </div>
+
+          <div class="daily-focus-list" id="dailyFocusList" aria-live="polite">
+            <div class="daily-focus-empty">Cargando foco diario...</div>
+          </div>
+
+          <div class="daily-focus-footer" id="dailyFocusFooter" aria-live="polite">
+            <p class="daily-focus-footer__text">Ajustando prioridades...</p>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <div class="modal-backdrop hidden" id="createCardModal" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="createCardTitle">
+        <h3 id="createCardTitle">Crear etiqueta</h3>
+        <form id="createCardForm">
+          <div class="field">
+            <label for="newCardTitle">Titulo</label>
+            <input id="newCardTitle" name="title" type="text" maxlength="80" required>
+          </div>
+          <div class="field">
+            <label>Departamentos</label>
+            <div id="newCardMetaGroup" class="task-department-checklist" role="group" aria-label="Seleccion de departamentos">
+              <label class="task-department-option"><input type="checkbox" name="meta" value="Producto"> Producto</label>
+              <label class="task-department-option"><input type="checkbox" name="meta" value="UX"> UX</label>
+              <label class="task-department-option"><input type="checkbox" name="meta" value="Backend"> Backend</label>
+              <label class="task-department-option"><input type="checkbox" name="meta" value="Frontend" checked> Frontend</label>
+              <label class="task-department-option"><input type="checkbox" name="meta" value="Marketing"> Marketing</label>
+              <label class="task-department-option"><input type="checkbox" name="meta" value="RRHH"> RRHH</label>
+              <label class="task-department-option"><input type="checkbox" name="meta" value="Ventas"> Ventas</label>
+              <label class="task-department-option"><input type="checkbox" name="meta" value="BBDD"> BBDD</label>
+              <label class="task-department-option"><input type="checkbox" name="meta" value="General"> General</label>
+            </div>
+            <p class="field-help">Puedes marcar uno o varios departamentos.</p>
+          </div>
+          <div class="field">
+            <label>Personas asignadas</label>
+            <div id="newCardAssigneesGroup" class="task-assignee-checklist" role="group" aria-label="Seleccion de personas asignadas"></div>
+            <p class="field-help">Marca una o varias personas. Puedes dejarlo vacío si no hay responsable.</p>
+          </div>
+          <div class="field">
+            <label for="newCardPriority">Prioridad</label>
+            <select id="newCardPriority" name="priority" required>
+              <option value="low">Baja</option>
+              <option value="medium" selected>Media</option>
+              <option value="high">Alta</option>
+              <option value="critical">Critica</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="newCardParentTask">Tarea padre (Subtarea)</label>
+            <select id="newCardParentTask" name="parent_task_id">
+              <option value="">Sin tarea padre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="newCardColumn">Columna</label>
+            <select id="newCardColumn" name="column" required>
+              <option value="backlog">Backlog</option>
+              <option value="open-todo" selected>Open / To Do</option>
+              <option value="in-progress">In Progress</option>
+              <option value="blocked">Blocked</option>
+              <option value="review-qa">Review / QA</option>
+              <option value="pending-approval">Pending Approval</option>
+              <option value="done">Done / Complete</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="newCardStartDate">Fecha inicio</label>
+            <input type="date" id="newCardStartDate" name="start_date" required>
+          </div>
+          <div class="field">
+            <label for="newCardEndDate">Fecha fin</label>
+            <input type="date" id="newCardEndDate" name="end_date" required>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-secondary btn-danger" id="deleteCardBtn" type="button" style="display:none;">Eliminar</button>
+            <button class="btn-secondary" id="cancelCreateModal" type="button">Cancelar</button>
+            <button class="btn-primary" id="saveCardBtn" type="submit">Crear</button>
+          </div>
+        </form>
+
+        <section class="task-details hidden" id="taskDetailsPanel" aria-live="polite">
+          <div class="task-delay-summary" id="taskDelaySummary"></div>
+          <h4>Comentarios</h4>
+          <ul class="task-comments-list" id="taskCommentsList">
+            <li class="task-details-empty">No hay comentarios.</li>
+          </ul>
+          <form class="task-comment-form" id="taskCommentForm">
+            <textarea id="newTaskComment" maxlength="600" placeholder="Escribe un comentario..." required></textarea>
+            <button class="btn-secondary" type="submit">Anadir comentario</button>
+          </form>
+
+          <h4>Adjuntos</h4>
+          <div class="task-attachments-actions">
+            <input id="taskAttachmentInput" type="file">
+            <button class="btn-secondary" id="uploadAttachmentBtn" type="button">Subir</button>
+          </div>
+          <ul class="task-attachments-list" id="taskAttachmentsList">
+            <li class="task-details-empty">No hay adjuntos.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal-backdrop hidden" id="confirmChildrenModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="confirmChildrenTitle">
+    <div class="modal confirm-children-modal">
+      <h3 id="confirmChildrenTitle">¿Has revisado todas las tareas hijas?</h3>
+      <p class="confirm-children-subtitle">Las siguientes tareas hijas pasarán también a <strong>Done</strong>:</p>
+      <ul id="confirmChildrenList" class="confirm-children-list"></ul>
+      <div class="modal-actions">
+        <button class="btn-secondary" id="cancelChildrenBtn" type="button">Cancelar</button>
+        <button class="btn-primary" id="confirmChildrenBtn" type="button">Sí, completar todo</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+ 

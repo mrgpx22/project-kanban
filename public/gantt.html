@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gantt | Kanban Board</title>
+  <link rel="stylesheet" href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css">
+  <link rel="stylesheet" href="assets/css/gantt.css?v=20260407-1">
+  <link rel="stylesheet" href="assets/css/ai-assistant.css?v=20260320-2">
+  <link rel="stylesheet" href="assets/css/responsive.css?v=20260324-1">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/supabase-config.js?v=20260317-1"></script>
+  <script src="assets/js/app-context.js?v=20260317-1"></script>
+  <script src="assets/js/shared-utils.js?v=20260327-1"></script>
+  <script src="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js"></script>
+  <script src="assets/js/router.js" defer></script>
+  <script src="assets/js/gantt.js?v=20260407-2" defer></script>
+  <script src="assets/js/ai-assistant.js?v=20260320-2" defer></script>
+</head>
+<body>
+  <main class="gantt-app">
+    <header class="gantt-header">
+      <nav class="view-tabs" aria-label="Vistas de proyecto">
+        <a class="tab-btn" id="mainViewLink" href="index.html">MAIN</a>
+        <a class="tab-btn" id="kanbanViewLink" href="kanban.html">Kanban</a>
+        <a class="tab-btn" id="calendarViewLink" href="calendar.html">Calendar</a>
+        <a class="tab-btn" id="notesViewLink" href="notas.html">Notas</a>
+        <button class="tab-btn is-active" type="button">Gantt Chart</button>
+      </nav>
+      <div class="gantt-header-actions">
+        <button class="btn-shift-today" id="shiftProjectToToday" type="button" title="Alinear el proyecto al dia de hoy" disabled>Mover a hoy</button>
+        <button class="btn-refresh" id="refreshGantt" type="button">Refrescar</button>
+      </div>
+    </header>
+
+    <p class="project-context" id="projectContext" aria-live="polite"></p>
+    <p class="sync-status is-info" id="syncStatus" aria-live="polite">Esperando sincronizacion...</p>
+
+    <details class="ai-assistant" data-ai-widget data-ai-page="GANTT" data-ai-endpoint="/api/ai/n8n" open>
+      <summary class="ai-assistant__summary">
+        <div class="ai-assistant__summary-left">
+          <p class="ai-assistant__eyebrow">IA n8n</p>
+          <h2 class="ai-assistant__summary-title">Pregunta a la IA</h2>
+          <p class="ai-assistant__summary-hint">La respuesta se renderiza con el CSS de la app.</p>
+        </div>
+        <span class="ai-assistant__chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="ai-assistant__body">
+        <form class="ai-assistant__form" data-ai-form>
+          <label class="ai-assistant__field">
+            <span class="ai-assistant__field-label">Pregunta</span>
+            <input
+              class="ai-assistant__input"
+              data-ai-input
+              type="text"
+              placeholder="Ej. ¿Hay tareas que se necesiten acabar esta semana?"
+              autocomplete="off"
+            >
+          </label>
+          <button class="ai-assistant__button" data-ai-submit type="submit">Preguntar</button>
+        </form>
+
+        <p class="ai-assistant__hint">La respuesta se pintará con tarjetas y tablas del sistema.</p>
+
+        <div class="ai-assistant__output" data-ai-output aria-live="polite"></div>
+      </div>
+    </details>
+
+    <section class="summary" aria-label="Resumen de planificacion">
+      <article class="summary-item">
+        <span>Total</span>
+        <strong id="totalTasks">0</strong>
+      </article>
+      <article class="summary-item">
+        <span>Con fechas</span>
+        <strong id="scheduledTasks">0</strong>
+      </article>
+      <article class="summary-item">
+        <span>Sin fechas</span>
+        <strong id="unscheduledTasks">0</strong>
+      </article>
+      <article class="summary-item summary-item--critical">
+        <span>Ruta critica</span>
+        <strong id="criticalPathTasks">0</strong>
+      </article>
+    </section>
+
+    <section class="gantt-shell" aria-label="Diagrama de Gantt">
+      <div class="gantt-container" id="ganttHere"></div>
+    </section>
+
+    <div class="task-info-backdrop hidden" id="taskInfoModal" aria-hidden="true">
+      <div class="task-info-modal" role="dialog" aria-modal="true" aria-labelledby="taskInfoModalTitle">
+        <div class="task-info-header">
+          <h3 id="taskInfoModalTitle">Detalle de tarea</h3>
+          <button class="task-info-close" id="taskInfoCloseBtn" type="button" aria-label="Cerrar">Cerrar</button>
+        </div>
+        <div class="task-info-body">
+          <p class="task-info-title" id="taskInfoTitleText">-</p>
+          <dl class="task-info-grid">
+            <dt>ID</dt>
+            <dd id="taskInfoId">-</dd>
+            <dt>Estado Kanban</dt>
+            <dd id="taskInfoKanbanStatus">-</dd>
+            <dt>Estado Gantt</dt>
+            <dd id="taskInfoGanttStatus">-</dd>
+            <dt>Departamento</dt>
+            <dd id="taskInfoDepartment">-</dd>
+            <dt>Prioridad</dt>
+            <dd id="taskInfoPriority">-</dd>
+            <dt>Fechas</dt>
+            <dd id="taskInfoDates">Sin fechas</dd>
+            <dt>Personas</dt>
+            <dd id="taskInfoAssignees">Sin asignar</dd>
+            <dt>Comentarios</dt>
+            <dd id="taskInfoCommentsCount">0</dd>
+            <dt>Tarea padre</dt>
+            <dd id="taskInfoParent">Sin tarea padre</dd>
+          </dl>
+          <div class="task-info-actions">
+            <button class="task-info-edit" id="taskInfoEditDatesBtn" type="button">Editar fechas</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

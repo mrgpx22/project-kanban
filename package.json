@@ -1,0 +1,14 @@
+{
+  "name": "kanban-railway",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kanban web app preparada para despliegue en Railway",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

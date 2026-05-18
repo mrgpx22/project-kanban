@@ -1,0 +1,15 @@
+window.SUPABASE_CONFIG = Object.freeze({
+  url: "",
+  anonKey: "",
+  table: "kanban_tasks",
+  linksTable: "kanban_task_links",
+  commentsTable: "kanban_task_comments",
+  attachmentsTable: "kanban_task_attachments",
+  notesTable: "kanban_quick_notes",
+  delayTasksTable: "n8n_delay_tasks",
+  projectsTable: "kanban_projects",
+  projectMembersTable: "kanban_project_members",
+  usersTable: "kanban_users",
+  attachmentsBucket: "kanban-attachments",
+  autoAnonymousAuth: false,
+});

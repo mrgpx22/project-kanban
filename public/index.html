@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAIN | Proyectos de Empresa</title>
+  <link rel="stylesheet" href="assets/css/main.css?v=20260317-3">
+  <link rel="stylesheet" href="assets/css/ai-assistant.css?v=20260320-2">
+  <link rel="stylesheet" href="assets/css/responsive.css?v=20260324-1">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/supabase-config.js?v=20260317-1"></script>
+  <script src="assets/js/app-context.js?v=20260317-1"></script>
+  <script src="assets/js/shared-utils.js?v=20260327-1"></script>
+  <script src="assets/js/router.js" defer></script>
+  <script src="assets/js/main.js?v=20260317-3" defer></script>
+  <script src="assets/js/ai-assistant.js?v=20260320-2" defer></script>
+</head>
+<body>
+  <main class="main-app">
+    <header class="main-header">
+      <div>
+        <h1>MAIN - Proyectos de Empresa</h1>
+        <p>Selecciona un proyecto para abrir sus vistas.</p>
+      </div>
+
+      <div class="main-actions">
+        <button class="btn-secondary hidden" id="openPeopleDirectory" type="button">Directorio personas</button>
+        <button class="btn-primary" id="openCreateProject" type="button">+ Nuevo proyecto</button>
+        <button class="btn-secondary" id="signOutBtn" type="button">Cerrar sesion</button>
+      </div>
+    </header>
+
+    <section class="session-strip" aria-label="Estado de sesion">
+      <span id="currentUserLabel">Usuario: -</span>
+      <span id="currentRoleLabel">Rol: -</span>
+    </section>
+
+    <p class="sync-status" id="syncStatus" aria-live="polite"></p>
+
+    
+    <section class="dashboard" id="dashboardSection" aria-label="Dashboard de proyectos">
+      <div class="dashboard-kpis">
+        <article class="dashboard-kpi">
+          <span>Total tareas</span>
+          <strong id="dashboardTotalTasks">0</strong>
+        </article>
+        <article class="dashboard-kpi">
+          <span>Pendientes</span>
+          <strong id="dashboardPendingTasks">0</strong>
+        </article>
+        <article class="dashboard-kpi">
+          <span>Completadas</span>
+          <strong id="dashboardDoneTasks">0</strong>
+        </article>
+        <article class="dashboard-kpi">
+          <span>Prioridad alta/critica</span>
+          <strong id="dashboardHighPriorityTasks">0</strong>
+        </article>
+      </div>
+
+      <div class="workload-grid">
+        <article class="workload-card">
+          <h3>Carga por persona</h3>
+          <ul class="workload-list" id="workloadByPerson"></ul>
+        </article>
+        <article class="workload-card">
+          <h3>Carga por departamento</h3>
+          <ul class="workload-list" id="workloadByDepartment"></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="project-search" aria-label="Busqueda de proyectos">
+      <label class="project-search-label" for="projectSearchInput">Buscar por nombre</label>
+      <div class="project-search-row">
+        <input id="projectSearchInput" type="search" placeholder="Nombre del proyecto..." autocomplete="off">
+        <div class="project-search-tags" role="group" aria-label="Filtro por area">
+          <button class="project-tag-btn is-active" type="button" data-topic="all">Todos</button>
+          <button class="project-tag-btn" type="button" data-topic="ia">IA</button>
+          <button class="project-tag-btn" type="button" data-topic="idi">I+D+i</button>
+          <button class="project-tag-btn" type="button" data-topic="web">Web</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-grid" id="projectGrid" aria-label="Listado de proyectos"></section>
+    <p class="empty-state hidden" id="emptyProjects">No hay proyectos disponibles para tu usuario.</p>
+
+    <div class="modal-backdrop hidden" id="createProjectModal" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="createProjectTitle">
+        <h2 id="createProjectTitle">Crear proyecto</h2>
+        <form id="createProjectForm">
+          <div class="field">
+            <label for="projectName">Nombre</label>
+            <input id="projectName" name="name" type="text" maxlength="120" required>
+          </div>
+          <div class="field">
+            <label for="projectDescription">Descripcion</label>
+            <textarea id="projectDescription" name="description" rows="4" maxlength="600"></textarea>
+          </div>
+          <div class="field">
+            <label for="projectType">Tipo de proyecto</label>
+            <select id="projectType" name="project_type" required>
+              <option value="web" selected>Web</option>
+              <option value="ia">IA</option>
+              <option value="idi">I+D+i</option>
+            </select>
+          </div>
+          <div class="field" id="projectDepartmentsField">
+            <label>Departamentos (true = anadir miembros)</label>
+            <p class="field-help">Marca los departamentos que quieras anadir automaticamente como miembros del proyecto.</p>
+            <div class="project-dept-checklist" id="projectDepartmentsChecklist" role="group" aria-label="Checklist de departamentos"></div>
+          </div>
+          <div class="field" id="projectPeopleField">
+            <label>Personas (seleccion multiple)</label>
+            <p class="field-help">Tambien puedes anadir personas concretas por nombre completo.</p>
+            <div class="project-dept-checklist" id="projectPeopleChecklist" role="group" aria-label="Checklist de personas"></div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-secondary" id="cancelCreateProject" type="button">Cancelar</button>
+            <button class="btn-primary" type="submit">Crear proyecto</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="manageMembersModal" aria-hidden="true">
+      <div class="modal members-modal" role="dialog" aria-modal="true" aria-labelledby="manageMembersTitle">
+        <h2 id="manageMembersTitle">Gestionar personas</h2>
+        <p class="members-project-name" id="membersProjectName"></p>
+
+        <div class="members-layout">
+          <aside class="available-users-panel">
+            <h3>Usuarios para anadir</h3>
+            <ul class="available-users-list" id="availableUsersList"></ul>
+          </aside>
+
+          <div class="members-main-panel">
+            <form id="addMemberForm">
+              <div class="field">
+                <label for="memberUserSelect">Personas (nombre completo)</label>
+                <select id="memberUserSelect" name="user_ids" multiple size="8"></select>
+              </div>
+              <div class="field">
+                <label for="memberPermission">Permiso</label>
+                <select id="memberPermission" name="permission" required>
+                  <option value="viewer">Solo lectura</option>
+                  <option value="editor" selected>Editor</option>
+                  <option value="manager">Manager</option>
+                </select>
+              </div>
+              <div class="modal-actions">
+                <button class="btn-primary" type="submit">Anadir al proyecto</button>
+              </div>
+            </form>
+
+            <div class="members-list-wrap">
+              <ul class="members-list" id="membersList"></ul>
+            </div>
+          </div>
+        </div>
+
+        <p class="sync-status" id="membersStatus" aria-live="polite"></p>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" id="closeMembersModal" type="button">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="peopleDirectoryModal" aria-hidden="true">
+      <div class="modal people-modal" role="dialog" aria-modal="true" aria-labelledby="peopleDirectoryTitle">
+        <h2 id="peopleDirectoryTitle">Directorio de Personas</h2>
+        <p class="members-project-name">Gestion de fichas: Nombre, Apellido1, Apellido2, Cargo y Departamento.</p>
+
+        <section class="auth-create-panel" aria-labelledby="authCreateTitle">
+          <h3 id="authCreateTitle">Crear acceso (Authentication)</h3>
+          <p class="members-project-name">Crea el usuario en auth.users y enlaza su ficha automaticamente.</p>
+
+          <form id="createAuthUserForm">
+            <div class="field-grid">
+              <div class="field">
+                <label for="authEmailInput">Email</label>
+                <input id="authEmailInput" name="email" type="email" maxlength="160" required>
+              </div>
+              <div class="field">
+                <label for="authPasswordInput">Contrasena</label>
+                <input id="authPasswordInput" name="password" type="password" minlength="8" maxlength="120" required>
+              </div>
+              <div class="field">
+                <label for="authRoleSelect">Rol app</label>
+                <select id="authRoleSelect" name="role">
+                  <option value="user" selected>User</option>
+                  <option value="jefe">Jefe</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="authDisplayNameInput">Display name</label>
+                <input id="authDisplayNameInput" name="display_name" type="text" maxlength="120">
+              </div>
+              <div class="field">
+                <label for="authFirstNameInput">Nombre</label>
+                <input id="authFirstNameInput" name="first_name" type="text" maxlength="80">
+              </div>
+              <div class="field">
+                <label for="authLast1Input">Apellido1</label>
+                <input id="authLast1Input" name="last_name_1" type="text" maxlength="80">
+              </div>
+              <div class="field">
+                <label for="authLast2Input">Apellido2</label>
+                <input id="authLast2Input" name="last_name_2" type="text" maxlength="80">
+              </div>
+              <div class="field">
+                <label for="authJobTitleInput">Cargo</label>
+                <input id="authJobTitleInput" name="job_title" type="text" maxlength="120">
+              </div>
+              <div class="field">
+                <label for="authDepartmentInput">Departamento</label>
+                <input id="authDepartmentInput" name="department" type="text" maxlength="120">
+              </div>
+            </div>
+            <div class="modal-actions">
+              <button class="btn-secondary" id="authCreateFormReset" type="button">Limpiar acceso</button>
+              <button class="btn-primary" type="submit">Crear usuario auth</button>
+            </div>
+          </form>
+
+          <p class="sync-status" id="authCreateStatus" aria-live="polite"></p>
+        </section>
+
+        <form id="peopleForm">
+          <div class="field-grid">
+            <div class="field">
+              <label for="personUserId">User ID (UUID)</label>
+              <input id="personUserId" name="user_id" type="text" placeholder="UUID en auth.users" required>
+            </div>
+            <div class="field">
+              <label for="personName">Nombre</label>
+              <input id="personName" name="first_name" type="text" maxlength="80">
+            </div>
+            <div class="field">
+              <label for="personLast1">Apellido1</label>
+              <input id="personLast1" name="last_name_1" type="text" maxlength="80">
+            </div>
+            <div class="field">
+              <label for="personLast2">Apellido2</label>
+              <input id="personLast2" name="last_name_2" type="text" maxlength="80">
+            </div>
+            <div class="field">
+              <label for="personJob">Cargo</label>
+              <input id="personJob" name="job_title" type="text" maxlength="120">
+            </div>
+            <div class="field">
+              <label for="personDept">Departamento</label>
+              <input id="personDept" name="department" type="text" maxlength="120">
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-secondary" id="peopleFormReset" type="button">Limpiar</button>
+            <button class="btn-primary" type="submit">Guardar ficha</button>
+          </div>
+        </form>
+
+        <p class="sync-status" id="peopleStatus" aria-live="polite"></p>
+
+        <div class="people-table-wrap">
+          <table class="people-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Apellido1</th>
+                <th>Apellido2</th>
+                <th>Cargo</th>
+                <th>Departamento</th>
+                <th>Accion</th>
+              </tr>
+            </thead>
+            <tbody id="peopleTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" id="closePeopleDirectory" type="button">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

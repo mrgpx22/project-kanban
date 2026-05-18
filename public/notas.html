@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notas | Kanban Board</title>
+  <link rel="stylesheet" href="assets/css/notas.css?v=20260317-1">
+  <link rel="stylesheet" href="assets/css/ai-assistant.css?v=20260320-2">
+  <link rel="stylesheet" href="assets/css/responsive.css?v=20260324-1">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/supabase-config.js?v=20260317-1"></script>
+  <script src="assets/js/app-context.js?v=20260317-1"></script>
+  <script src="assets/js/shared-utils.js?v=20260327-1"></script>
+  <script src="assets/js/router.js" defer></script>
+  <script src="assets/js/notas.js?v=20260317-1" defer></script>
+  <script src="assets/js/ai-assistant.js?v=20260320-2" defer></script>
+</head>
+<body>
+  <main class="notes-app">
+    <header class="notes-header">
+      <nav class="view-tabs" aria-label="Vistas de proyecto">
+        <a class="tab-btn" id="mainViewLink" href="index.html">MAIN</a>
+        <a class="tab-btn" id="kanbanViewLink" href="kanban.html">Kanban</a>
+        <a class="tab-btn" id="calendarViewLink" href="calendar.html">Calendar</a>
+        <a class="tab-btn" id="ganttViewLink" href="gantt.html">Gantt Chart</a>
+        <button class="tab-btn is-active" type="button">Notas</button>
+      </nav>
+      <button class="btn-refresh" id="refreshNotes" type="button">Refrescar</button>
+    </header>
+
+    <p class="project-context" id="projectContext" aria-live="polite"></p>
+    <p class="sync-status is-info" id="syncStatus" aria-live="polite">Esperando sincronizacion...</p>
+
+    <details class="ai-assistant" data-ai-widget data-ai-page="NOTAS" data-ai-endpoint="/api/ai/n8n" open>
+      <summary class="ai-assistant__summary">
+        <div class="ai-assistant__summary-left">
+          <p class="ai-assistant__eyebrow">IA n8n</p>
+          <h2 class="ai-assistant__summary-title">Pregunta a la IA</h2>
+          <p class="ai-assistant__summary-hint">La respuesta se renderiza con el CSS de la app.</p>
+        </div>
+        <span class="ai-assistant__chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="ai-assistant__body">
+        <form class="ai-assistant__form" data-ai-form>
+          <label class="ai-assistant__field">
+            <span class="ai-assistant__field-label">Pregunta</span>
+            <input
+              class="ai-assistant__input"
+              data-ai-input
+              type="text"
+              placeholder="Ej. ¿Hay tareas que se necesiten acabar esta semana?"
+              autocomplete="off"
+            >
+          </label>
+          <button class="ai-assistant__button" data-ai-submit type="submit">Preguntar</button>
+        </form>
+
+        <p class="ai-assistant__hint">La respuesta se pintará con tarjetas y tablas del sistema.</p>
+
+        <div class="ai-assistant__output" data-ai-output aria-live="polite"></div>
+      </div>
+    </details>
+
+    <section class="notes-shell" aria-label="Notas rapidas">
+      <form class="notes-create" id="noteForm">
+        <label class="notes-input-wrap" for="noteInput">
+          <span>Nueva nota</span>
+          <input id="noteInput" name="note" type="text" maxlength="280" placeholder="Escribe una nota rapida...">
+        </label>
+        <button class="btn-create" id="createNoteBtn" type="submit">Crear</button>
+      </form>
+
+      <ul class="notes-list" id="notesList"></ul>
+      <p class="notes-empty hidden" id="notesEmpty">No hay notas para este proyecto.</p>
+    </section>
+  </main>
+</body>
+</html>

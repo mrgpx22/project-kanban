@@ -1,0 +1,92 @@
+.login-body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background:
+    radial-gradient(circle at 14% 12%, rgba(0, 116, 224, 0.2) 0%, transparent 36%),
+    radial-gradient(circle at 86% 88%, rgba(0, 178, 157, 0.2) 0%, transparent 40%),
+    radial-gradient(circle at 58% -10%, rgba(246, 169, 89, 0.16) 0%, transparent 38%),
+    linear-gradient(180deg, #f8fbff 0%, #e7f0ff 100%);
+}
+
+.login-body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.3;
+  background-image:
+    linear-gradient(rgba(121, 160, 219, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(121, 160, 219, 0.2) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.login-app {
+  width: min(480px, 100%);
+  position: relative;
+  z-index: 1;
+}
+
+.login-card {
+  position: relative;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 251, 255, 0.94) 100%);
+  border: 1px solid #d4e3fb;
+  border-radius: 22px;
+  box-shadow: 0 20px 50px rgba(17, 49, 96, 0.18);
+  padding: 26px;
+  overflow: hidden;
+}
+
+.login-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0074e0 0%, #00b29e 68%, #f2b04f 100%);
+}
+
+.login-card h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-family: "Space Grotesk", "Manrope", sans-serif;
+  color: #1d3c70;
+  letter-spacing: 0.01em;
+}
+
+.login-subtitle {
+  margin: 10px 0 18px;
+  color: #5d7297;
+  font-size: 0.89rem;
+  line-height: 1.45;
+}
+
+#loginForm {
+  display: grid;
+  gap: 2px;
+}
+
+.login-submit {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.login-role {
+  margin: 10px 0 0;
+  min-height: 22px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #315f9e;
+}
+
+@media (max-width: 560px) {
+  .login-card {
+    padding: 20px 16px 18px;
+    border-radius: 18px;
+  }
+
+  .login-card h1 {
+    font-size: 1.28rem;
+  }
+}
