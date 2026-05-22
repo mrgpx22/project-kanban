@@ -18,7 +18,7 @@ Aplicación web para la gestión de fichajes laborales con autenticación de usu
 ![HTML](https://img.shields.io/badge/HTML+CSS-E34F26?style=flat&logo=html5&logoColor=white)
 
 ## 📂 Estructura del proyecto
-
+```
 project-kanban/
 ├── src/
 ├── public/
@@ -27,6 +27,7 @@ project-kanban/
 │   └── js/
 └── package.json
 └── vite.config.js
+```
 
 ## 🚀 Instalación y uso
 
