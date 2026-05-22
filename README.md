@@ -64,13 +64,6 @@ VITE_SUPABASE_ANON_KEY=tu_clave
 
 Aplicación orientada a facilitar el seguimiento de jornadas laborales y el control horario de usuarios desde una interfaz sencilla y accesible.
 
-## 📌 Roadmap
-
-- [ ] Exportación de fichajes
-- [ ] Panel de estadísticas
-- [ ] Gestión de usuarios avanzada
-- [ ] Responsive mejorado para móvil
-
 ## 👨‍💻 Autor
 
 **Joan Cabrerizo Benedicto**
