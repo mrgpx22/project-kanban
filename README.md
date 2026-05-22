@@ -1,23 +1,23 @@
-# 🚀 Project Kanban
+#  Project Kanban
 
 Aplicación web para la gestión de fichajes laborales con autenticación de usuarios y visualización mensual de actividad mediante un calendario interactivo.
 
-## ✨ Características
+##  Características
 
-- 🕐 Registro de fichajes de entrada y salida
-- 🔒 Sistema de autenticación de usuarios
-- 📅 Calendario mensual con visualización de actividad
-- ⚡ Interfaz rápida y moderna desarrollada con Vite
-- 🗄️ Backend y base de datos gestionados con Supabase
+-  Registro de fichajes de entrada y salida
+-  Sistema de autenticación de usuarios
+-  Calendario mensual con visualización de actividad
+-  Interfaz rápida y moderna desarrollada con Vite
+-  Backend y base de datos gestionados con Supabase
 
-## 🛠️ Tecnologías utilizadas
+##  Tecnologías utilizadas
 
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat&logo=supabase&logoColor=white)
 ![HTML](https://img.shields.io/badge/HTML+CSS-E34F26?style=flat&logo=html5&logoColor=white)
 
-## 📂 Estructura del proyecto
+##  Estructura del proyecto
 ```
 project-kanban/
 ├── src/
@@ -29,7 +29,7 @@ project-kanban/
 └── vite.config.js
 ```
 
-## 🚀 Instalación y uso
+##  Instalación y uso
 
 **1. Clona el repositorio:**
 ```bash
@@ -51,7 +51,7 @@ npm install
 npm run dev
 ```
 
-## 🔧 Configuración
+##  Configuración
 
 Crea un archivo `.env` en la raíz del proyecto con las credenciales de Supabase:
 
@@ -60,11 +60,11 @@ VITE_SUPABASE_URL=tu_url
 VITE_SUPABASE_ANON_KEY=tu_clave
 ```
 
-## 📸 Vista general
+## Vista general
 
 Aplicación orientada a facilitar el seguimiento de jornadas laborales y el control horario de usuarios desde una interfaz sencilla y accesible.
 
-## 👨‍💻 Autor
+## Autor
 
 **Joan Cabrerizo Benedicto**
 
