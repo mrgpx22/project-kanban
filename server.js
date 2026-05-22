@@ -33,7 +33,7 @@ const loadDotEnv = () => {
 loadDotEnv();
 
 const PORT = Number(process.env.PORT || 3000);
-const HOST = "0.0.0.0";
+const HOST = "localhost";
 const PUBLIC_DIR = path.join(__dirname, "public");
 const SUPABASE_URL = String(process.env.SUPABASE_URL || "").replace(/\/+$/, "");
 const SUPABASE_SERVICE_ROLE_KEY = String(process.env.SUPABASE_SERVICE_ROLE_KEY || "");
