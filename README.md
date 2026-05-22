@@ -29,6 +29,10 @@ project-kanban/
 └── vite.config.js
 ```
 
+## Screenshots
+
+[project-kanban]([https://github.com/mrgpx22/project-kanban](https://github.com/mrgpx22/project-kanban/tree/main/public/assets/screenshots))
+
 ##  Instalación y uso
 
 **1. Clona el repositorio:**
