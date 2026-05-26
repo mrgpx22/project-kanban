@@ -33,11 +33,22 @@ project-kanban/
 
 - Repositorio: [screenshots](https://github.com/mrgpx22/project-kanban/tree/main/public/assets/screenshots)
 
+# Login del Kanban
 ![Login](./public/assets/screenshots/Login%20Screenshot.png)
+
+# Main Screenshot (Donde se pueden ver todos los proyectos donde participas) El Jefe podrá ver todos los proyectos y podrá gestionar Proyectos y Personas 
 ![Main](./public/assets/screenshots/Main%20Screenshot.png)
+
+# El Kanban de un Proyecto (Por donde podrás ver las tareas  del Proyecto
 ![Kanban](./public/assets/screenshots/Kanban%20Screenshot.png)
+
+# El Calendario del Proyecto de Kanban (Por donde podrás ver los plazos de las tareas  del Proyecto
 ![Calendar](./public/assets/screenshots/Calendar%20Screenshot.png)
+
+# El Gantt del Proyecto de Kanban (Por donde podrás estructurar el Proyecto)
 ![Gantt](./public/assets/screenshots/Gantt%20Screenshot.png)
+
+# El Apartado de Notas del Proyecto de Kanban (Por donde podrás hacer apuntes rapidos del Proyecto)
 ![Notas](./public/assets/screenshots/Notas%20Screenshot.png)
 
 ##  Instalación y uso
