@@ -32,7 +32,14 @@ project-kanban/
 ## Screenshots
 
 - Repositorio: [screenshots](https://github.com/mrgpx22/project-kanban/tree/main/public/assets/screenshots)
-  
+
+![Login](./public/assets/screenshots/Login%20Screenshot.png)
+![Main](./public/assets/screenshots/Main%20Screenshot.png)
+![Kanban](./public/assets/screenshots/Kanban%20Screenshot.png)
+![Calendar](./public/assets/screenshots/Calendar%20Screenshot.png)
+![Gantt](./public/assets/screenshots/Gantt%20Screenshot.png)
+![Notas](./public/assets/screenshots/Notas%20Screenshot.png)
+
 ##  Instalación y uso
 
 **1. Clona el repositorio:**
